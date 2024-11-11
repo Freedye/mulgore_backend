@@ -1,7 +1,7 @@
 <div align="center">
 <h1 align="center">Mulgore</h1>
 <br />
-<img alt="License: " src="https://img.shields.io/badge/License--blue" /><br>
+<img alt="License: BSD" src="https://img.shields.io/badge/License-BSD-blue" /><br>
 <br>
 Backend stuff for Mulgore, using it to learn Rust.
 </div>
