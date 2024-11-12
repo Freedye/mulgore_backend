@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpServer, Responder, HttpResponse};
+use actix_cors::Cors;
 use reqwest::Client;
 
 mod character;
@@ -51,6 +52,7 @@ async fn raider_io_talents_call() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
+        .wrap(Cors::default().allow_any_origin())
         .route("/", web::get().to(index))
         .route("/getRaiderIOData", web::get().to(raider_io_character_call))
         .route("/getBestTalentsBasedOnSpec", web::get().to(raider_io_talents_call))
