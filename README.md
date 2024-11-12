@@ -17,6 +17,7 @@ cargo install
 
 ### Usage
 ```
+Create a .env with you Client ID and Client Secret as API_KEY and API_SECRET
 cargo run
 ```
 
