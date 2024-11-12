@@ -1,1 +1,1 @@
-pub mod CharacterDataRIO;
+pub mod character_data_rio;
