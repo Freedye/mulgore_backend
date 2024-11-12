@@ -41,7 +41,7 @@ async fn raider_io_character_call() -> impl Responder {
 }
 
 async fn raider_io_talents_call() -> impl Responder {
-    match get_raiderio_data().await {
+    match get_best_talents_based_on_spec().await {
         Ok(api_response) => HttpResponse::Ok().json(api_response),
         Err(_) => HttpResponse::InternalServerError().body("Error while calling Raider.IO"),
     }
