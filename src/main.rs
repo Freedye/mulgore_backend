@@ -15,9 +15,15 @@ async fn get_raiderio_data() -> Result<character::character_data_rio::CharacterD
 }
 
 async fn index() -> impl Responder {
+    "Endpoints: \n
+    /               : show this page \n
+    /getRaiderIOData: get character data from raider.io (hard coded for testing purposes for now."
+}
+
+async fn raider_io_api_call() -> impl Responder {
     match get_raiderio_data().await {
-        Ok(api_response) => HttpResponse::Ok().json(api_response), // Rispondi con i dati ottenuti
-        Err(_) => HttpResponse::InternalServerError().body("Errore nel chiamare l'API esterna"),
+        Ok(api_response) => HttpResponse::Ok().json(api_response),
+        Err(_) => HttpResponse::InternalServerError().body("Error while calling Raider.IO"),
     }
 }
 
@@ -25,7 +31,9 @@ async fn index() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .route("/", web::get().to(index))
+        .route("/", web::get().to(index))
+        // Nuova route "/about"
+        .route("/getRaiderIOData", web::get().to(raider_io_api_call))
     })
     .bind("127.0.0.1:8080")?
     .run()
