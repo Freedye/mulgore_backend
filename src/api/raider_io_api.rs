@@ -3,6 +3,20 @@ use reqwest::Client;
 use crate::character::character_data_rio::CharacterDataFromRio;
 use crate::talents::best_talents_by_spec::BestTalentsBasedOnSpec;
 
+pub async fn raider_io_character_call() -> impl Responder {
+    match get_raiderio_data().await {
+        Ok(api_response) => HttpResponse::Ok().json(api_response),
+        Err(_) => HttpResponse::InternalServerError().body("Error while calling Raider.IO for character data"),
+    }
+}
+
+pub async fn raider_io_talents_call() -> impl Responder {
+    match get_best_talents_based_on_spec().await {
+        Ok(api_response) => HttpResponse::Ok().json(api_response),
+        Err(_) => HttpResponse::InternalServerError().body("Error while calling Raider.IO for best talents"),
+    }
+}
+
 async fn get_raiderio_data() -> Result<CharacterDataFromRio, reqwest::Error> {
     let client = Client::new();
     let response = client
@@ -23,18 +37,4 @@ async fn get_best_talents_based_on_spec() -> Result<BestTalentsBasedOnSpec, reqw
         .json::<BestTalentsBasedOnSpec>()
         .await?;
     Ok(response)
-}
-
-pub async fn raider_io_character_call() -> impl Responder {
-    match get_raiderio_data().await {
-        Ok(api_response) => HttpResponse::Ok().json(api_response),
-        Err(_) => HttpResponse::InternalServerError().body("Error while calling Raider.IO for character data"),
-    }
-}
-
-pub async fn raider_io_talents_call() -> impl Responder {
-    match get_best_talents_based_on_spec().await {
-        Ok(api_response) => HttpResponse::Ok().json(api_response),
-        Err(_) => HttpResponse::InternalServerError().body("Error while calling Raider.IO for best talents"),
-    }
 }

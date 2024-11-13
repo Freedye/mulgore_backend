@@ -6,6 +6,20 @@ use std::env;
 use crate::character::character_data_from_blizzard::CharacterDataFromBlizzard;
 use crate::util::query_params::QueryParams;
 
+pub async fn get_blizzard_auth_code() -> impl Responder {
+    match start_blizzard_auth_flow().await {
+        Ok(api_response) => HttpResponse::Ok().json(api_response),
+        Err(_) => HttpResponse::InternalServerError().body("Error while obtaining Blizzard auth code"),
+    }
+}
+
+pub async fn get_character_data_from_blizzard(query: web::Query<QueryParams>) -> impl Responder {
+    match get_blizzard_character_data(&query.code).await {
+        Ok(api_response) => HttpResponse::Ok().json(api_response),
+        Err(_) => HttpResponse::InternalServerError().body("Error while obtaining Blizzard character data"),
+    }
+}
+
 async fn get_blizzard_character_data(code: &String) -> Result<CharacterDataFromBlizzard, reqwest::Error> {
     dotenv().ok();
     let api_key = &code;
@@ -62,18 +76,4 @@ async fn start_blizzard_auth_flow() -> Result<String, reqwest::Error> {
     );
 
     Ok(auth_url)
-}
-
-pub async fn get_blizzard_auth_code() -> impl Responder {
-    match start_blizzard_auth_flow().await {
-        Ok(api_response) => HttpResponse::Ok().json(api_response),
-        Err(_) => HttpResponse::InternalServerError().body("Error while obtaining Blizzard auth code"),
-    }
-}
-
-pub async fn get_character_data_from_blizzard(query: web::Query<QueryParams>) -> impl Responder {
-    match get_blizzard_character_data(&query.code).await {
-        Ok(api_response) => HttpResponse::Ok().json(api_response),
-        Err(_) => HttpResponse::InternalServerError().body("Error while obtaining Blizzard character data"),
-    }
 }
